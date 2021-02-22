@@ -1,6 +1,4 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom';
-
 import {
   CBadge,
   CDropdown,
@@ -10,19 +8,8 @@ import {
   CImg
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import firebaseApp from 'src/FirebaseConfig'
-
 
 const TheHeaderDropdown = () => {
-
-  const auth = firebaseApp.auth();
-
-  const history = useHistory();
-
-  const handleLogout = () => {
-    auth.signOut().then(() => history.push('/login'));
-}
-
   return (
     <CDropdown
       inNav
@@ -93,9 +80,9 @@ const TheHeaderDropdown = () => {
           <CBadge color="primary" className="mfs-auto">42</CBadge>
         </CDropdownItem>
         <CDropdownItem divider />
-        <CDropdownItem onClick={handleLogout}>
+        <CDropdownItem>
           <CIcon name="cil-lock-locked" className="mfe-2" />
-          Logout
+          Lock Account
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

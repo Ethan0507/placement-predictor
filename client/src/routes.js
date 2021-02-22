@@ -64,6 +64,7 @@ const ViewStatus = React.lazy(() => import("./views/student/ViewStatus"));
 const ViewHistory = React.lazy(() => import("./views/student/ViewHistory"));
 
 const ViewDashboard = React.lazy(() => import("./views/tpo/ViewDashboard"));
+const ViewStudents = React.lazy(() => import("./views/tpo/ViewStudents"));
 
 const routes = [
   { path: "/", exact: true, name: "Home" },
@@ -75,15 +76,19 @@ const routes = [
   { path: "/student", name: "Student", component: ViewStatus, exact: true },
   { path: "/student/view-status", name: "View Status", component: ViewStatus },
   {
-    path: "/student/view-history",
-    name: "View History",
-    component: ViewHistory,
+    path: "/tpo",
+    component: ViewDashboard,
+    exact: true,
   },
-  { path: "/tpo", name: "Student", component: ViewDashboard, exact: true },
   {
     path: "/tpo/view-dashboard",
-    name: "View Status",
+    name: "View Dashboard",
     component: ViewDashboard,
+  },
+  {
+    path: "/tpo/view-students",
+    name: "View Students",
+    component: ViewStudents,
   },
 
   { path: "/base", name: "Base", component: Cards, exact: true },

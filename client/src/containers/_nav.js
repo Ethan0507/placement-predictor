@@ -23,19 +23,19 @@ const _nav = [
     icon: "cil-drop",
   },
   {
-    _tag: "CSidebarNavItem",
-    name: "View History",
-    to: "/student/view-history",
-    icon: "cil-pencil",
-  },
-  {
     _tag: "CSidebarNavTitle",
     _children: ["TPO Panel"],
   },
   {
     _tag: "CSidebarNavItem",
-    name: "TPO Dashboard",
+    name: "View Dashboard",
     to: "/tpo/view-dashboard",
+    icon: "cil-drop",
+  },
+  {
+    _tag: "CSidebarNavItem",
+    name: "View Students",
+    to: "/tpo/view-students",
     icon: "cil-drop",
   },
 
