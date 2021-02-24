@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import {
+  CInputCheckbox,
+  CLabel,
   CCol,
   CNav,
   CNavItem,
@@ -11,6 +13,7 @@ import {
   CCardBody,
   CTabs,
   CCardHeader,
+  CFormGroup,
 } from "@coreui/react";
 
 const ViewStudents = () => {
@@ -20,26 +23,42 @@ const ViewStudents = () => {
 
   return (
     <div>
-      <CRow>
-        <CTabs>
-          <CNav variant="tabs">
-            <CNavItem>
-              <CNavLink>Home</CNavLink>
-            </CNavItem>
-            <CNavItem>
-              <CNavLink>Profile</CNavLink>
-            </CNavItem>
-            <CNavItem>
-              <CNavLink>Messages</CNavLink>
-            </CNavItem>
-          </CNav>
-          <CTabContent>
-            <CTabPane>{`1. ${lorem}`}</CTabPane>
-            <CTabPane>{`2. ${lorem}`}</CTabPane>
-            <CTabPane>{`3. ${lorem}`}</CTabPane>
-          </CTabContent>
-        </CTabs>
-      </CRow>
+      <CTabs activeTab="home">
+        <CNav variant="tabs">
+          <CNavItem>
+            <CNavLink data-tab="home">Home</CNavLink>
+          </CNavItem>
+          <CNavItem>
+            <CNavLink data-tab="profile">Profile</CNavLink>
+          </CNavItem>
+          <CNavItem>
+            <CNavLink data-tab="messages">Messages</CNavLink>
+          </CNavItem>
+        </CNav>
+        <CTabContent>
+          <CTabPane data-tab="home">
+            <CCol>
+              <br />
+              <CFormGroup>
+                <CInputCheckbox
+                  id="checkbox1"
+                  name="checkbox1"
+                  value="option1"
+                />
+                <CLabel
+                  variant="checkbox"
+                  className="form-check-label"
+                  htmlFor="checkbox1"
+                >
+                  Option 1
+                </CLabel>
+              </CFormGroup>
+            </CCol>
+          </CTabPane>
+          <CTabPane data-tab="profile">456</CTabPane>
+          <CTabPane data-tab="messages">789</CTabPane>
+        </CTabContent>
+      </CTabs>
     </div>
   );
 };
