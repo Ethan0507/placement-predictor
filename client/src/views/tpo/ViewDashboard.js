@@ -2,76 +2,74 @@ import React, { lazy, useContext, useEffect, useState } from "react";
 import { CRow, CCol, CWidgetBrand, CCard, CCardHeader } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import { CChartDoughnut } from "@coreui/react-chartjs";
-import {
-  CWidgetProgressIcon,
-} from "@coreui/react";
+import { CWidgetProgressIcon } from "@coreui/react";
 import { AuthContext } from "src/context/auth-context";
 const ViewDashboard = () => {
-
   const auth = useContext(AuthContext);
 
   const [db_values, setDBValues] = useState({
-    total_placed : 0,
-    total_unplaced : 0,
-    m_placed : 0,
-    m_unplaced : 0,
-    hr_placed : 0,
-    hr_unplaced : 0
+    total_placed: 0,
+    total_unplaced: 0,
+    m_placed: 0,
+    m_unplaced: 0,
+    hr_placed: 0,
+    hr_unplaced: 0,
   });
-  
+
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/tpo/view-dashboard', {
-          method: "GET", 
-          headers: {
-            'Content-Type' : "application/json",
-            'Authorization' : "Bearer " +auth.token
-          },
-          });
-          
-          let responseData;
-          if (response.ok) {
-            responseData = await response.json();
+        const response = await fetch(
+          "http://localhost:5000/api/tpo/view-dashboard",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + auth.token,
+            },
           }
+        );
 
-          if (responseData) {
-            setDBValues(responseData);
-          }
-      } catch (err) {
+        let responseData;
+        if (response.ok) {
+          responseData = await response.json();
+        }
 
-      }
-
+        if (responseData) {
+          setDBValues(responseData);
+          console.log(responseData);
+        }
+      } catch (err) {}
     })();
   }, []);
 
   return (
     <>
       <CRow>
-      <CCol sm="6" lg="6">
-        <CWidgetProgressIcon
-          header={db_values.total_placed}
-          text="Total Placed Students"
-          color="gradient-success"
-          value="100"
-          inverse
-        >
-          <CIcon name="cil-userFollow" height="36" />
-        </CWidgetProgressIcon>
-      </CCol>
+        <CCol sm="6" lg="6">
+          <CWidgetProgressIcon
+            header={db_values.total_placed}
+            text="Total Placed Students"
+            color="gradient-success"
+            value="100"
+            inverse
+          >
+            <CIcon name="cil-userFollow" height="36" />
+          </CWidgetProgressIcon>
+        </CCol>
 
-      <CCol sm="6" lg="6">
-        <CWidgetProgressIcon
-          header={db_values.total_unplaced}
-          text="Total Unplaced Students"
-          color="gradient-warning"
-          value="100"
-          inverse
-        >
-          <CIcon name="cil-basket" height="36" />
-        </CWidgetProgressIcon>
-      </CCol>
-    </CRow>
+        <CCol sm="6" lg="6">
+          <CWidgetProgressIcon
+            header={db_values.total_unplaced}
+            text="Total Unplaced Students"
+            color="gradient-warning"
+            value="100"
+            inverse
+          >
+            <CIcon name="cil-basket" height="36" />
+          </CWidgetProgressIcon>
+        </CCol>
+      </CRow>
       <CRow>
         <CCol>
           <CCard>
