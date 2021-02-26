@@ -5,7 +5,9 @@ const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
-router.use(checkAuth);
+router.use((req, res, next) => {
+    checkAuth(req, res, next, 'admin');
+});
 
 router.get('/', adminController.getUsers);
 

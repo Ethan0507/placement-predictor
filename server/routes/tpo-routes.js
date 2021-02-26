@@ -10,9 +10,11 @@ const router = express.Router();
 
 // router.get('/user/:uid', placesControllers.getPlacesByUserId);
 
-router.use(checkAuth);
+router.use((req, res, next) => {
+    checkAuth(req, res, next, 'tpo');
+});
 
-router.get('/view-students/details/:student', tpoController.getStudentDetailsById);
+router.get('/view-dashboard', tpoController.getDashboardDetails);
 router.get('/view-students', tpoController.getStudentDetails);
 
 // router.post(

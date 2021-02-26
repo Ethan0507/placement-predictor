@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
   CBadge,
   CDropdown,
@@ -8,8 +8,15 @@ import {
   CImg
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { AuthContext } from '../context/auth-context';
+import { useHistory } from 'react-router-dom';
 
 const TheHeaderDropdown = () => {
+
+  const authContext = useContext(AuthContext);
+
+  const history = useHistory();
+
   return (
     <CDropdown
       inNav
@@ -80,9 +87,9 @@ const TheHeaderDropdown = () => {
           <CBadge color="primary" className="mfs-auto">42</CBadge>
         </CDropdownItem>
         <CDropdownItem divider />
-        <CDropdownItem>
-          <CIcon name="cil-lock-locked" className="mfe-2" />
-          Lock Account
+        <CDropdownItem  onClick={() => { authContext.logout(); history.push('/login'); }}>
+          <CIcon name="cil-lock-locked" className="mfe-2"/>
+          Logout
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

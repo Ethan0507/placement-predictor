@@ -28,8 +28,8 @@ app.use((req, res, next) => {
 // Push the routes here
 app.use('/api/student', studentRoutes);
 app.use('/api/tpo', tpoRoutes);
-app.use('/api/shared', sharedRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api', sharedRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError("Could not find this route.", 404);

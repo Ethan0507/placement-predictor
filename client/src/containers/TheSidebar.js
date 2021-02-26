@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   CCreateElement,
@@ -14,12 +14,69 @@ import {
 
 import CIcon from "@coreui/icons-react";
 
-// sidebar nav config
-import navigation from "./_nav";
+import { AuthContext } from "../context/auth-context";
+
+
+const savedData = JSON.parse(localStorage.getItem("userData"));
+let role = null;
+if (savedData) {
+  role = savedData.role;
+}
+
+let navigation;
+
+switch(role) {
+  case 'tpo' : 
+    navigation = [
+      {
+        _tag: "CSidebarNavTitle",
+        _children: ["TPO Panel"],
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "View Dashboard",
+        to: "/tpo/view-dashboard",
+        icon: "cil-drop",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "View Students",
+        to: "/tpo/view-students",
+        icon: "cil-drop",
+      },
+    ];
+    break;
+    
+  case 'admin' : {
+    navigation = [{
+      _tag: "CSidebarNavTitle",
+      _children: ["Admin Panel"],
+    },
+    {
+      _tag: "CSidebarNavItem",
+      name: "Users",
+      to: "/admin/users",
+      icon: "cil-drop",
+    },
+    ];
+    break;
+  }
+
+  default : 
+    navigation = [];
+    break;
+}
+
 
 const TheSidebar = () => {
   const dispatch = useDispatch();
-  const show = useSelector((state) => state.sidebarShow);
+
+  const auth = useContext(AuthContext);
+  let show = useSelector((state) => state.sidebarShow);
+  
+  if (auth.isLoggedIn && auth.userRole === "student") {
+    show = false;
+  }
 
   return (
     <CSidebar
@@ -32,7 +89,7 @@ const TheSidebar = () => {
           name="logo-negative"
           height={35}
         /> */}
-        <h4 className="c-sidebar-brand-full">Placement Tracker</h4>
+        <h4 className="c-sidebar-brand-full">Placement-Predictor</h4>
         <CIcon
           className="c-sidebar-brand-minimized"
           name="sygnet"
