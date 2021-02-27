@@ -33,9 +33,6 @@ const ViewDashboard = () => {
         let responseData;
         if (response.ok) {
           responseData = await response.json();
-        }
-
-        if (responseData) {
           setDBValues(responseData);
           console.log(responseData);
         }

@@ -11,7 +11,8 @@ const router = express.Router();
 // router.get('/user/:uid', placesControllers.getPlacesByUserId);
 
 router.use((req, res, next) => {
-    checkAuth(req, res, next, 'tpo');
+    res.locals.accessRole = "tpo";
+    checkAuth(req, res, next);
 });
 
 router.get('/view-dashboard', tpoController.getDashboardDetails);

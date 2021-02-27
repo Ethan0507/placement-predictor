@@ -62,9 +62,9 @@ const Login = () => {
             }
           });
 
-          const response = await responseData.json();
 
           if (responseData.ok) {
+            const response = await responseData.json();
             authContext.login(response.userId, response.token, response.role, null);
             if (response.role === "student") {
               history.push('/student/view-status');
@@ -76,10 +76,6 @@ const Login = () => {
             // else {
             //   history.push('/admin/');
             // }
-          }
-
-          else {
-            throw new Error(response.message, responseData.status);
           }
         } catch (err) {
           actions.setSubmitting(false);

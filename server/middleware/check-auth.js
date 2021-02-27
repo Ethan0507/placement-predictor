@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/http-error.js");
 
-module.exports = (req, res, next, access) => {
+module.exports = (req, res, next) => {
 	if (req.method === "OPTIONS") {
 		return next();
 	}
@@ -12,8 +12,8 @@ module.exports = (req, res, next, access) => {
 			throw new HttpError("Authentication failed!", 401);
 		}
 		const decodedToken = jwt.verify(token, "supersecret_dont_share");
-		if (decodedToken.role === access) {
-			req.userData = { userId: decodedToken.userId };
+		if (decodedToken.role === res.locals.accessRole) {
+			res.locals.userData = { userId: decodedToken.userId };
 			next();
 		} else {
 			return next(new HttpError("Access could not be granted!", 403));

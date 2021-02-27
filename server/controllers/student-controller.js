@@ -5,13 +5,11 @@ const HttpError = require('../models/http-error');
 const User = require('../models/user');
 const StudentDetail = require('../models/studentdetail');
 
-
-
 const getStudentDetailsById = async (req, res, next) => {
 
-  const studentId = req.userData.userId;
-
+  const studentId = res.locals.userData.userId;
   let student;
+
   try {
       student = await StudentDetail.find({ userId: studentId });
   } catch (err) {
@@ -30,17 +28,30 @@ const getStudentDetailsById = async (req, res, next) => {
       return next(error);
     }
   
-    res.json({ student: student[0] });
+    res.status(200).json({ student: student[0] });
 };
 
 const updateDetails = async (req, res, next) => {
 
-    const { name, branch, cgpa } = req.body;
+    const { name,
+      gender,
+      xPercentage,
+      xiiPercentage,
+      degreePercentage,
+      etestP,
+      mbaP,
+      xiiBoard,
+      xBoard,
+      specialisation,
+      workex,
+      hscStream,
+      degreeT,
+      yearOfGrad } = req.body;
     
-
     let userDetails;
+
     try {
-        userDetails = await User.findById(req.userData.userId);
+        userDetails = await User.findById(res.locals.userData.userId);
     } catch (err) {
         const error = new HttpError(
           'Updating Details failed, please try again!',
@@ -56,9 +67,21 @@ const updateDetails = async (req, res, next) => {
     
       
       const StudentDetails = new StudentDetail({
-        name: name, 
-        branch: branch,
-        cgpa: cgpa,
+        name: name,
+        gender: gender,
+        xPercentage: xPercentage,
+        xiiPercentage: xiiPercentage,
+        degreePercentage: degreePercentage,
+        etestP: etestP,
+        mbaP: mbaP,
+        xiiBoard: xiiBoard,
+        xBoard: xBoard,
+        specialisation: specialisation,
+        workex: workex,
+        hscStream: hscStream,
+        degreeT: degreeT,
+        yearOfGrad: yearOfGrad,
+        placement_status: "unplaced",
         userId: userDetails
     });
     

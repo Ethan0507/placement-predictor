@@ -61,10 +61,10 @@ const getDashboardDetails = async (req, res, next) => {
     students_placed = await StudentDetail.find({ placement_status : "placed" });
     students_unplaced = await StudentDetail.find({ placement_status : "unplaced" });
 
-    m_students_placed = await StudentDetail.find({ $and: [ { branch : "marketing" }, { placement_status : "placed" } ] });
-    m_students_unplaced = await StudentDetail.find({ $and: [ { branch : "marketing" }, { placement_status : "unplaced" } ] });
-    hr_students_placed = await StudentDetail.find({ $and: [ { branch : "hr" }, { placement_status : "placed" } ] });
-    hr_students_unplaced = await StudentDetail.find({ $and: [ { branch : "hr" }, { placement_status : "unplaced" } ] });
+    m_students_placed = await StudentDetail.find({ $and: [ { specialisation : "Mkt&Fin" }, { placement_status : "placed" } ] });
+    m_students_unplaced = await StudentDetail.find({ $and: [ { specialisation : "Mkt&Fin" }, { placement_status : "unplaced" } ] });
+    hr_students_placed = await StudentDetail.find({ $and: [ { specialisation : "Mkt&HR" }, { placement_status : "placed" } ] });
+    hr_students_unplaced = await StudentDetail.find({ $and: [ { specialisation : "Mkt&HR" }, { placement_status : "unplaced" } ] });
   } catch (err) {
     const error = new HttpError(
       'Something went wrong, could not find students.',

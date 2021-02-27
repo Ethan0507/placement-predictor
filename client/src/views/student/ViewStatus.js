@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import {
+  CAlert,
   CCol,
   CSelect,
   CCardFooter,
@@ -16,6 +17,7 @@ import {
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import "./ViewStatus.css";
+import { AuthContext } from "src/context/auth-context";
 
 const SignupSchema = Yup.object().shape({
   name: Yup.string().required("Required"),
@@ -36,7 +38,6 @@ const SignupSchema = Yup.object().shape({
     .lessThan(100, "Please enter valid percentage")
     .required("Required"),
   xiiBoard: Yup.string("Must be string").required("Required"),
-  gender: Yup.string("Must be string").required("Required"),
   xBoard: Yup.string("Must be string").required("Required"),
   hscStream: Yup.string("Must be string").required("Required"),
   degreeT: Yup.string("Must be string").required("Required"),
@@ -46,30 +47,116 @@ const SignupSchema = Yup.object().shape({
 });
 
 const ViewStatus = () => {
+
+  const auth = useContext(AuthContext);
+
+  const [studentDetails, setStudentDetails] = useState({
+    name: "",
+    gender: "",
+    xPercentage: "",
+    xiiPercentage: "",
+    degreePercentage: "",
+    etestP: "",
+    mbaP: "",
+    xiiBoard: "",
+    xBoard: "",
+    specialisation: "",
+    workex: "",
+    hscStream: "",
+    degreeT: "",
+    yearOfGrad: "",
+    placement_status: ""
+  });
+
+  const [errorOccured, setErrorOccured] = useState(false);
+ 
+
+  useEffect(() => {
+    (async () => {
+      if (!!studentDetails.name) {  
+        setErrorOccured(false);
+        try {
+          const response = await fetch("http://localhost:5000/api/student/", {
+            method: "GET",
+            headers: {
+              "Authorization" : 'Bearer ' +auth.token
+            }
+          });
+
+          let responseData;
+
+          if (response.ok) {
+            responseData = await response.json();
+            if(!!responseData.student) {
+              setStudentDetails(responseData.student);
+            }
+          }
+
+        } catch (err) {
+          setErrorOccured(true);
+        }
+    }
+    })();
+  }, [studentDetails]);
+
   return (
     <div>
       <Formik
-        initialValues={{
-          name: "",
-          gender: "",
-          xPercentage: "",
-          xiiPercentage: "",
-          degreePercentage: "",
-          etestP: "",
-          mbaP: "",
-          xiiBoard: "",
-          gender: "",
-          xBoard: "",
-          specialisation: "",
-          workex: "",
-          hscStream: "",
-          degreeT: "",
-          yearOfGrad: "",
-        }}
+        enableReinitialize={true}
+        initialValues={studentDetails}
         validationSchema={SignupSchema}
-        onSubmit={(values) => {
+        onSubmit={async (values, actions) => {
           // same shape as initial values
-          console.log(values);
+          try {
+            const response = await fetch("http://localhost:5000/api/student/", {
+              method: "POST",
+              body: JSON.stringify({
+                name: values.name,
+                gender: values.gender,
+                xPercentage: values.xPercentage,
+                xiiPercentage: values.xiiPercentage,
+                degreePercentage: values.degreePercentage,
+                etestP: values.etestP,
+                mbaP: values.mbaP,
+                xiiBoard: values.xiiBoard,
+                xBoard: values.xBoard,
+                specialisation: values.specialisation,
+                workex: values.workex,
+                hscStream: values.hscStream,
+                degreeT: values.degreeT,
+                yearOfGrad: values.yearOfGrad
+              }),
+              headers: {
+                "Content-Type" : 'application/json',
+                "Authorization" : "Bearer " +auth.token
+              }
+            });
+
+            const responseData = await response.json();
+
+            if (response.ok) {
+              setStudentDetails({
+                name: values.name,
+                gender: values.gender,
+                xPercentage: values.xPercentage,
+                xiiPercentage: values.xiiPercentage.toString(),
+                degreePercentage: values.degreePercentage.toString(),
+                etestP: values.etestP,
+                mbaP: values.mbaP.toString(),
+                xiiBoard: values.xiiBoard,
+                xBoard: values.xBoard,
+                specialisation: values.specialisation,
+                workex: values.workex,
+                hscStream: values.hscStream,
+                degreeT: values.degreeT,
+                yearOfGrad: values.yearOfGrad,
+                placement_status: responseData.placement_status
+              });
+            }
+          } catch (err) {
+            actions.setSubmitting(false);
+            setErrorOccured(true);
+          }
         }}
       >
         {({ errors, values, touched }) => (
@@ -79,8 +166,13 @@ const ViewStatus = () => {
                 Check Placement Status
                 {/* <small> validation feedback</small> */}
               </CCardHeader>
+              {errorOccured && <CAlert color="warning" closeButton>
+                Some error occurred, please try again!
+              </CAlert>}
               <Form>
                 <CCardBody>
+                {!!studentDetails.placement_status && studentDetails.placement_status === "placed" && <CAlert name="status" color="success">Placed</CAlert>}
+                {!!studentDetails.placement_status && studentDetails.placement_status === "unplaced" && <CAlert name="status" color="warning">Unplaced</CAlert>}
                   <CFormGroup row>
                     <CCol xs="12" xl="4">
                       <CLabel htmlFor="name">Name</CLabel>
@@ -90,6 +182,7 @@ const ViewStatus = () => {
                         as={CInput}
                         value={values.name}
                         placeholder="John Doe"
+                        disabled={!!studentDetails.name}
                       />
                       <CInvalidFeedback>
                         {!!errors.name && !!touched.name ? (
@@ -104,6 +197,7 @@ const ViewStatus = () => {
                         invalid={!!errors.gender && !!touched.gender}
                         name="gender"
                         as={CSelect}
+                        disabled={!!studentDetails.gender}
                       >
                         <option value="">Select an option</option>
                         <option value="Male">Male</option>
@@ -123,6 +217,7 @@ const ViewStatus = () => {
                         invalid={!!errors.yearOfGrad && !!touched.yearOfGrad}
                         name="yearOfGrad"
                         as={CSelect}
+                        disabled={!!studentDetails.yearOfGrad}
                       >
                         <option value="">Select a year</option>
                         <option value="2020">2020</option>
@@ -150,6 +245,7 @@ const ViewStatus = () => {
                         as={CInput}
                         value={values.xPercentage}
                         placeholder="0-100"
+                        disabled={!!studentDetails.xPercentage}
                       />
                       <CInvalidFeedback>
                         {errors.xPercentage && touched.xPercentage ? (
@@ -164,6 +260,7 @@ const ViewStatus = () => {
                         invalid={!!errors.xBoard && !!touched.xBoard}
                         name="xBoard"
                         as={CSelect}
+                        disabled={!!studentDetails.xBoard}
                       >
                         <option value="">Select an option</option>
                         <option value="Central">Central</option>
@@ -188,6 +285,7 @@ const ViewStatus = () => {
                         as={CInput}
                         value={values.xiiPercentage}
                         placeholder="0-100"
+                        disabled={!!studentDetails.xiiPercentage}
                       />
                       <CInvalidFeedback>
                         {errors.xiiPercentage && touched.xiiPercentage ? (
@@ -201,6 +299,7 @@ const ViewStatus = () => {
                         invalid={!!errors.xiiBoard && !!touched.xiiBoard}
                         name="xiiBoard"
                         as={CSelect}
+                        disabled={!!studentDetails.xiiBoard}
                       >
                         <option value="">Select an option</option>
                         <option value="Central">Central</option>
@@ -218,6 +317,7 @@ const ViewStatus = () => {
                         invalid={!!errors.hscStream && !!touched.hscStream}
                         name="hscStream"
                         as={CSelect}
+                        disabled={!!studentDetails.hscStream}
                       >
                         <option value="">Select an option</option>
                         <option value="Science">Science</option>
@@ -246,6 +346,7 @@ const ViewStatus = () => {
                         }
                         value={values.degreePercentage}
                         placeholder="0-100"
+                        disabled={!!studentDetails.degreePercentage}
                       />
                       <CInvalidFeedback>
                         {errors.degreePercentage && touched.degreePercentage ? (
@@ -259,10 +360,11 @@ const ViewStatus = () => {
                         invalid={!!errors.degreeT && !!touched.degreeT}
                         name="degreeT"
                         as={CSelect}
+                        disabled={!!studentDetails.degreeT}
                       >
                         <option value="">Select an option</option>
-                        <option value="Sci&Tech">Science & Technology</option>
-                        <option value="Comm&Mgmt">Commerce & Mgmt</option>
+                        <option value="Science & Technology">Science & Technology</option>
+                        <option value="Commerce & Mgmt">Commerce & Mgmt</option>
                         <option value="Others">Others</option>
                       </Field>
                       <CInvalidFeedback>
@@ -280,6 +382,7 @@ const ViewStatus = () => {
                         invalid={!!errors.workex && !!touched.workex}
                         name="workex"
                         as={CSelect}
+                        disabled={!!studentDetails.workex}
                       >
                         <option value="">Select an option</option>
                         <option value="Yes">Yes</option>
@@ -299,6 +402,7 @@ const ViewStatus = () => {
                         as={CInput}
                         value={values.etestP}
                         placeholder="0-100"
+                        disabled={!!studentDetails.etestP}
                       />
                       <CInvalidFeedback>
                         {errors.etestP && touched.etestP ? (
@@ -317,6 +421,7 @@ const ViewStatus = () => {
                         }
                         name="specialisation"
                         as={CSelect}
+                        disabled={!!studentDetails.specialisation}
                       >
                         <option value="">Select an option</option>
                         <option value="Mkt&HR">Mkt&HR</option>
@@ -337,6 +442,7 @@ const ViewStatus = () => {
                         as={CInput}
                         value={values.mbaP}
                         placeholder="0-100"
+                        disabled={!!studentDetails.mbaP}
                       />
                       <CInvalidFeedback>
                         {errors.mbaP && touched.mbaP ? (
@@ -346,14 +452,14 @@ const ViewStatus = () => {
                     </CCol>
                   </CFormGroup>
                 </CCardBody>
-                <CCardFooter>
+                {!studentDetails.name && <CCardFooter>
                   <CButton type="submit" size="sm" color="success">
                     <CIcon name="cil-scrubber" /> Submit
                   </CButton>
-                  <CButton type="reset" size="sm" color="danger">
+                  <CButton type="reset" size="sm" color="danger" className="ml-1">
                     <CIcon name="cil-ban" /> Reset
                   </CButton>
-                </CCardFooter>
+                </CCardFooter>}
               </Form>
             </CCard>
           </div>
