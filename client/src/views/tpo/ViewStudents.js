@@ -5,6 +5,8 @@ import {
   CButton,
   CCollapse,
   CCardBody,
+  CRow,
+  CCol,
 } from "@coreui/react";
 import { AuthContext } from "src/context/auth-context";
 
@@ -39,16 +41,6 @@ const ViewStudents = () => {
     })();
   }, []);
 
-  const usersData = [
-    {
-      id: 0,
-      name: "John Doe",
-      registered: "2018/01/01",
-      role: "Guest",
-      status: "Pending",
-    },
-  ];
-
   const [details, setDetails] = useState([]);
   // const [items, setItems] = useState(usersData)
 
@@ -65,8 +57,8 @@ const ViewStudents = () => {
 
   const fields = [
     { key: "name", _style: { width: "40%" } },
-    "cgpa",
-    { key: "branch", _style: { width: "20%" } },
+    "mbaP",
+    { key: "specialisation", _style: { width: "20%" } },
     { key: "placement_status", _style: { width: "20%" } },
     {
       key: "show_details",
@@ -127,14 +119,108 @@ const ViewStudents = () => {
           return (
             <CCollapse show={details.includes(index)}>
               <CCardBody>
-                <h4>{item.cgpa}</h4>
-                <p className="text-muted">User since: {item.registered}</p>
-                <CButton size="sm" color="info">
-                  User Settings
-                </CButton>
-                <CButton size="sm" color="danger" className="ml-1">
-                  Delete
-                </CButton>
+                <CRow>
+                  <CCol xl="4">
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>Gender: </span>
+                      {item.gender}
+                    </p>
+                  </CCol>
+                  <CCol xl="4">
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>Passing Year: </span>
+                      {item.yearOfGrad}
+                    </p>
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol xl="4">
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>Xth Board: </span>
+                      {item.xBoard}
+                    </p>
+                  </CCol>
+                  <CCol xl="4">
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>
+                        Xth Percentage:{" "}
+                      </span>
+                      {item.xPercentage}
+                    </p>
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>XIIth Board: </span>
+                      {item.xiiBoard}
+                    </p>
+                  </CCol>
+                  <CCol>
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>XIIth Stream: </span>
+                      {item.hscStream}
+                    </p>
+                  </CCol>
+                  <CCol>
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>
+                        XIIth Percentage:{" "}
+                      </span>
+                      {item.xiiPercentage}
+                    </p>
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>Degree T: </span>
+                      {item.degreeT}
+                    </p>
+                  </CCol>
+                  <CCol>
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>
+                        ETest Percentage:{" "}
+                      </span>
+                      {item.etestP}
+                    </p>
+                  </CCol>
+                  <CCol>
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>
+                        Degree Percentage:{" "}
+                      </span>
+                      {item.degreePercentage}
+                    </p>
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol>
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>
+                        MBA Specialisation:{" "}
+                      </span>
+                      {item.specialisation}
+                    </p>
+                  </CCol>
+                  <CCol>
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>
+                        MBA Percentage:{" "}
+                      </span>
+                      {item.mbaP}
+                    </p>
+                  </CCol>
+                  <CCol>
+                    <p>
+                      <span style={{ fontWeight: "bold" }}>
+                        Work Experience:{" "}
+                      </span>
+                      {item.workex}
+                    </p>
+                  </CCol>
+                </CRow>
               </CCardBody>
             </CCollapse>
           );

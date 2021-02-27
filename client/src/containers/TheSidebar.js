@@ -35,7 +35,7 @@ switch (role) {
         _tag: "CSidebarNavItem",
         name: "View Dashboard",
         to: "/tpo/view-dashboard",
-        icon: "cil-drop",
+        icon: "cil-control",
       },
       {
         _tag: "CSidebarNavItem",
