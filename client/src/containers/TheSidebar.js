@@ -16,7 +16,6 @@ import CIcon from "@coreui/icons-react";
 
 import { AuthContext } from "../context/auth-context";
 
-
 const savedData = JSON.parse(localStorage.getItem("userData"));
 let role = null;
 if (savedData) {
@@ -25,8 +24,8 @@ if (savedData) {
 
 let navigation;
 
-switch(role) {
-  case 'tpo' : 
+switch (role) {
+  case "tpo":
     navigation = [
       {
         _tag: "CSidebarNavTitle",
@@ -46,34 +45,40 @@ switch(role) {
       },
     ];
     break;
-    
-  case 'admin' : {
-    navigation = [{
-      _tag: "CSidebarNavTitle",
-      _children: ["Admin Panel"],
-    },
-    {
-      _tag: "CSidebarNavItem",
-      name: "Users",
-      to: "/admin/users",
-      icon: "cil-drop",
-    },
+
+  case "admin": {
+    navigation = [
+      {
+        _tag: "CSidebarNavTitle",
+        _children: ["Admin Panel"],
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "View Users",
+        to: "/admin/view-users",
+        icon: "cil-drop",
+      },
+      {
+        _tag: "CSidebarNavItem",
+        name: "View Student Details",
+        to: "/admin/view-student-details",
+        icon: "cil-drop",
+      },
     ];
     break;
   }
 
-  default : 
+  default:
     navigation = [];
     break;
 }
-
 
 const TheSidebar = () => {
   const dispatch = useDispatch();
 
   const auth = useContext(AuthContext);
   let show = useSelector((state) => state.sidebarShow);
-  
+
   if (auth.isLoggedIn && auth.userRole === "student") {
     show = false;
   }

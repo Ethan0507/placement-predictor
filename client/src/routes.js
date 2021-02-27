@@ -1,6 +1,5 @@
 import React from "react";
 
-
 const Users = React.lazy(() => import("./views/users/Users"));
 const User = React.lazy(() => import("./views/users/User"));
 
@@ -10,8 +9,13 @@ const ViewHistory = React.lazy(() => import("./views/student/ViewHistory"));
 const ViewDashboard = React.lazy(() => import("./views/tpo/ViewDashboard"));
 const ViewStudents = React.lazy(() => import("./views/tpo/ViewStudents"));
 
+const ViewUsers = React.lazy(() => import("./views/admin/ViewUsers"));
+const ViewStudentDetails = React.lazy(() =>
+  import("./views/admin/ViewStudentDetails")
+);
+
 const routes = [
-  { path: "/", exact: true, name: "Home"},
+  { path: "/", exact: true, name: "Home" },
   { path: "/student", name: "Student", component: ViewStatus, exact: true },
   { path: "/student/view-status", name: "View Status", component: ViewStatus },
   {
@@ -28,6 +32,21 @@ const routes = [
     path: "/tpo/view-students",
     name: "View Students",
     component: ViewStudents,
+  },
+  {
+    path: "/admin",
+    component: ViewUsers,
+    exact: true,
+  },
+  {
+    path: "/admin/view-users",
+    name: "View Users",
+    component: ViewUsers,
+  },
+  {
+    path: "/admin/view-student-details",
+    name: "View Student Details",
+    component: ViewStudentDetails,
   },
 ];
 
