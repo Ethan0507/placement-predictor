@@ -13,9 +13,6 @@ import {
 } from "@coreui/react";
 import { AuthContext } from "src/context/auth-context";
 import { Formik, Form, Field } from "formik";
-import { ToastContainer, toast } from "react-toastify";
-
-import "react-toastify/dist/ReactToastify.css";
 
 const ViewStudentDetails = () => {
   const auth = useContext(AuthContext);
@@ -49,12 +46,6 @@ const ViewStudentDetails = () => {
 
   const [details, setDetails] = useState([]);
   // const [items, setItems] = useState(usersData)
-
-  const notify = () => {
-    toast.info("Info Notification !", {
-      position: toast.POSITION.BOTTOM_CENTER,
-    });
-  };
 
   const toggleDetails = (index) => {
     const position = details.indexOf(index);
