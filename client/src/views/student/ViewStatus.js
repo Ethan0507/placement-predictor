@@ -14,6 +14,7 @@ import {
   CLabel,
   CInput,
   CInvalidFeedback,
+  CSpinner
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import "./ViewStatus.css";
@@ -50,6 +51,8 @@ const ViewStatus = () => {
 
   const auth = useContext(AuthContext);
 
+  const [isLoading, setLoading] = useState(false);
+
   const [studentDetails, setStudentDetails] = useState({
     name: "",
     gender: "",
@@ -69,35 +72,35 @@ const ViewStatus = () => {
   });
 
   const [errorOccured, setErrorOccured] = useState(false);
- 
 
   useEffect(() => {
     (async () => {
-      if (!!studentDetails.name) {  
-        setErrorOccured(false);
-        try {
-          const response = await fetch("http://localhost:5000/api/student/", {
-            method: "GET",
-            headers: {
-              "Authorization" : 'Bearer ' +auth.token
-            }
-          });
-
-          let responseData;
-
-          if (response.ok) {
-            responseData = await response.json();
-            if(!!responseData.student) {
-              setStudentDetails(responseData.student);
-            }
+      setErrorOccured(false);
+      setLoading(true);
+      try {
+        const response = await fetch("http://localhost:5000/api/student/", {
+          method: "GET",
+          headers: {
+            "Authorization" : 'Bearer ' +auth.token
           }
+        });
 
-        } catch (err) {
-          setErrorOccured(true);
+        let responseData;
+
+        if (response.ok) {
+          setLoading(false);
+          responseData = await response.json();
+          if(!!responseData.student) {
+            setStudentDetails(responseData.student);
+          }
         }
-    }
+
+      } catch (err) {
+        setLoading(false);
+        setErrorOccured(true);
+      }
     })();
-  }, [studentDetails]);
+  }, []);
 
   return (
     <div>
@@ -107,6 +110,7 @@ const ViewStatus = () => {
         validationSchema={SignupSchema}
         onSubmit={async (values, actions) => {
           // same shape as initial values
+          setLoading(true);
           try {
             const response = await fetch("http://localhost:5000/api/student/", {
               method: "POST",
@@ -135,26 +139,11 @@ const ViewStatus = () => {
             const responseData = await response.json();
 
             if (response.ok) {
-              setStudentDetails({
-                name: values.name,
-                gender: values.gender,
-                xPercentage: values.xPercentage,
-                xiiPercentage: values.xiiPercentage.toString(),
-                degreePercentage: values.degreePercentage.toString(),
-                etestP: values.etestP,
-                mbaP: values.mbaP.toString(),
-                xiiBoard: values.xiiBoard,
-                xBoard: values.xBoard,
-                specialisation: values.specialisation,
-                workex: values.workex,
-                hscStream: values.hscStream,
-                degreeT: values.degreeT,
-                yearOfGrad: values.yearOfGrad,
-                placement_status: responseData.placement_status
-              });
+              window.location.reload();
             }
           } catch (err) {
             actions.setSubmitting(false);
+            setLoading(false);
             setErrorOccured(true);
           }
         }}
@@ -171,8 +160,8 @@ const ViewStatus = () => {
               </CAlert>}
               <Form>
                 <CCardBody>
-                {!!studentDetails.placement_status && studentDetails.placement_status === "placed" && <CAlert name="status" color="success">Placed</CAlert>}
-                {!!studentDetails.placement_status && studentDetails.placement_status === "unplaced" && <CAlert name="status" color="warning">Unplaced</CAlert>}
+                {!!studentDetails.name && studentDetails.placement_status === "placed" && <CAlert name="status" color="success">Placed</CAlert>}
+                {!!studentDetails.name && studentDetails.placement_status === "unplaced" && <CAlert name="status" color="warning">Unplaced</CAlert>}
                   <CFormGroup row>
                     <CCol xs="12" xl="4">
                       <CLabel htmlFor="name">Name</CLabel>
@@ -453,12 +442,13 @@ const ViewStatus = () => {
                   </CFormGroup>
                 </CCardBody>
                 {!studentDetails.name && <CCardFooter>
-                  <CButton type="submit" size="sm" color="success">
+                  {!isLoading && <CButton type="submit" size="sm" color="success">
                     <CIcon name="cil-scrubber" /> Submit
-                  </CButton>
-                  <CButton type="reset" size="sm" color="danger" className="ml-1">
+                  </CButton>}
+                  {!isLoading && <CButton type="reset" size="sm" color="danger" className="ml-1">
                     <CIcon name="cil-ban" /> Reset
-                  </CButton>
+                  </CButton>}
+                  {isLoading && <CSpinner color="info" />}
                 </CCardFooter>}
               </Form>
             </CCard>
