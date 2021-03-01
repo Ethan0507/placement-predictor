@@ -31,6 +31,7 @@ const TheContent = () => {
                   render={props => (
                     <CFade>
                       <route.component {...props} />
+                    
                     </CFade>
                   )} />
               )

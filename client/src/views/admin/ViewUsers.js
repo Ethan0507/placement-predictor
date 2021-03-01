@@ -15,10 +15,10 @@ import {
   CModalFooter,
   CForm,
   CFormGroup,
-  CTooltip
+  CTooltip,
 } from "@coreui/react";
 
-import { CIcon } from '@coreui/icons-react';
+import { CIcon } from "@coreui/icons-react";
 
 import { AuthContext } from "src/context/auth-context";
 import { Formik, Form, Field } from "formik";
@@ -217,13 +217,14 @@ const ViewUsers = () => {
                   <Formik
                     initialValues={{
                       username: item.username,
-                      password: '',
+                      password: "",
                       role: item.role,
                     }}
                     onSubmit={async (values) => {
                       try {
                         const response = await fetch(
-                          "http://localhost:5000/api/admin/users/update/" + item._id,
+                          "http://localhost:5000/api/admin/users/update/" +
+                            item._id,
                           {
                             method: "POST",
                             headers: {
@@ -249,11 +250,13 @@ const ViewUsers = () => {
                           <Field name="username" as={CInput}></Field>
                         </CCol>
                         <CCol xs="12" xl="6">
-                            <CLabel htmlFor="password">Password <CTooltip content="Only enter text, if you want to update password. Else, please leave blank.">
-                            <CIcon name={'cilSettings'} />
+                          <CLabel htmlFor="password">
+                            Password{" "}
+                            <CTooltip content="Only enter text, if you want to update password. Else, please leave blank.">
+                              <CIcon name={"cilSettings"} />
                             </CTooltip>
-                            </CLabel>
-                            <Field name="password" as={CInput}></Field>
+                          </CLabel>
+                          <Field name="password" as={CInput}></Field>
                         </CCol>
                       </CFormGroup>
                       <CFormGroup row>
@@ -277,35 +280,36 @@ const ViewUsers = () => {
                       <CButton type="submit" size="sm" color="info">
                         Update
                       </CButton>
+                      <CButton
+                        size="sm"
+                        color="danger"
+                        className="ml-1"
+                        onClick={async () => {
+                          try {
+                            const response = await fetch(
+                              "http://localhost:5000/api/admin/users/delete/" +
+                                item._id,
+                              {
+                                method: "DELETE",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                  Authorization: "Bearer " + auth.token,
+                                },
+                              }
+                            );
+
+                            let responseData;
+                            if (response.ok) {
+                              alert("Delete successful!");
+                            }
+                            window.location.reload();
+                          } catch (err) {}
+                        }}
+                      >
+                        Delete
+                      </CButton>
                     </Form>
                   </Formik>
-                  <CButton
-                    size="sm"
-                    color="danger"
-                    className="ml-1"
-                    onClick={async () => {
-                      try {
-                        const response = await fetch(
-                          "http://localhost:5000/api/admin/users/delete/" + item._id,
-                          {
-                            method: "DELETE",
-                            headers: {
-                              "Content-Type": "application/json",
-                              Authorization: "Bearer " + auth.token,
-                            },
-                          }
-                        );
-
-                        let responseData;
-                        if (response.ok) {
-                          alert("Delete successful!");
-                        }
-                        window.location.reload();
-                      } catch (err) {}
-                    }}
-                  >
-                    Delete
-                  </CButton>
                 </CCardBody>
               </CCollapse>
             );
