@@ -1,8 +1,5 @@
 import React from "react";
 
-const Users = React.lazy(() => import("./views/users/Users"));
-const User = React.lazy(() => import("./views/users/User"));
-
 const ViewStatus = React.lazy(() => import("./views/student/ViewStatus"));
 
 const ViewDashboard = React.lazy(() => import("./views/tpo/ViewDashboard"));

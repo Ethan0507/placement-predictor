@@ -131,7 +131,7 @@ const ViewUsers = () => {
           }}
         >
           <Form>
-            <CModalHeader closeButton>Enter details</CModalHeader>
+            <CModalHeader closeButton>Enter details of new user</CModalHeader>
 
             <CModalBody>
               <CFormGroup>
@@ -167,7 +167,7 @@ const ViewUsers = () => {
             </CModalBody>
             <CModalFooter>
               <CButton color="primary" type="submit">
-                Submit
+                Add
               </CButton>{" "}
               <CButton color="secondary" onClick={toggle}>
                 Cancel
