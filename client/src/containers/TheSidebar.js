@@ -13,6 +13,7 @@ import {
 } from "@coreui/react";
 
 import CIcon from "@coreui/icons-react";
+import { freeSet } from '@coreui/icons'
 
 import { AuthContext } from "../context/auth-context";
 
@@ -39,13 +40,13 @@ const TheSidebar = () => {
           _tag: "CSidebarNavItem",
           name: "View Dashboard",
           to: "/tpo/view-dashboard",
-          icon: "cil-control",
+          icon: "cil-chart-pie",
         },
         {
           _tag: "CSidebarNavItem",
           name: "View Students",
           to: "/tpo/view-students",
-          icon: "cil-drop",
+          icon: "cil-people",
         },
       ];
       break;
@@ -60,13 +61,13 @@ const TheSidebar = () => {
           _tag: "CSidebarNavItem",
           name: "View Users",
           to: "/admin/view-users",
-          icon: "cil-drop",
+          icon: "cil-people",
         },
         {
           _tag: "CSidebarNavItem",
           name: "View Student Details",
           to: "/admin/view-student-details",
-          icon: "cil-drop",
+          icon: "cil-notes",
         },
       ];
       break;

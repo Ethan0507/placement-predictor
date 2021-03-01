@@ -20,11 +20,12 @@ const TheHeaderDropdown = () => {
     <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
       <CDropdownToggle className="c-header-nav-link" caret={false}>
         <div className="c-avatar">
-          <CImg
-            src="avatars/avatar.jpg"
-            className="c-avatar-img"
-            alt="user-avatar"
-          />
+          <h5>
+            <CIcon
+              name="cil-user"
+            />
+            {authContext.userRole}
+          </h5>
         </div>
       </CDropdownToggle>
       <CDropdownMenu className="pt-0" placement="bottom-end">

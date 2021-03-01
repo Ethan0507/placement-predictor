@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 
 import { useFormik } from "formik";
@@ -16,6 +16,7 @@ import {
   CInputGroupPrepend,
   CInputGroupText,
   CRow,
+  CSpinner
 } from "@coreui/react";
 
 import CIcon from "@coreui/icons-react";
@@ -31,6 +32,8 @@ const Login = () => {
   const authContext = useContext(AuthContext);
 
   const history = useHistory();
+
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     if (authContext.isLoggedIn) {
@@ -51,6 +54,7 @@ const Login = () => {
     },
     validationSchema,
     async onSubmit(values, actions) {
+      setLoading(true);
       try {
         const response = await fetch("http://localhost:5000/api/login", {
           method: "POST",
@@ -80,10 +84,12 @@ const Login = () => {
           }
         } else {
           actions.setSubmitting(false);
+          setLoading(false);
           actions.setErrors({ username: "Invalid username or password.", password: "Invalid username or password." });
         }
       } catch (err) {
         actions.setSubmitting(false);
+        setLoading(false);
         actions.setErrors({ username: err.message, password: err.message });
       }
     },
@@ -140,9 +146,10 @@ const Login = () => {
                     ) : null}
                     <CRow>
                       <CCol xs="6">
-                        <CButton color="primary" type="submit" className="px-4">
+                        {!isLoading && <CButton color="primary" type="submit" className="px-4">
                           Login
-                        </CButton>
+                        </CButton>}
+                        {isLoading && <CSpinner color="info" />}
                       </CCol>
                     </CRow>
                   </CForm>
