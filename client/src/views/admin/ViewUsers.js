@@ -15,7 +15,11 @@ import {
   CModalFooter,
   CForm,
   CFormGroup,
+  CTooltip
 } from "@coreui/react";
+
+import { CIcon } from '@coreui/icons-react';
+
 import { AuthContext } from "src/context/auth-context";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -32,17 +36,13 @@ const ViewUsers = () => {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
 
-  const handleAddUser = () => {
-    console.log("Hello");
-  };
-
   const auth = useContext(AuthContext);
   const [db_values, setDBValues] = useState([]);
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/admin/", {
+        const response = await fetch("http://localhost:5000/api/admin/users", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -57,11 +57,8 @@ const ViewUsers = () => {
 
         if (responseData) {
           setDBValues(responseData);
-          //   console.log(responseData.users);
         }
-      } catch (err) {
-        console.log(err);
-      }
+      } catch (err) {}
     })();
   }, []);
 
@@ -114,7 +111,7 @@ const ViewUsers = () => {
           onSubmit={async (values) => {
             try {
               const response = await fetch(
-                "http://localhost:5000/api/admin/newUser",
+                "http://localhost:5000/api/admin/users/new",
                 {
                   method: "POST",
                   headers: {
@@ -130,13 +127,7 @@ const ViewUsers = () => {
                 alert("User Added Successfully!");
               }
               window.location.reload();
-              //   if (responseData) {
-              //     setDBValues(responseData);
-              //     //   console.log(responseData.users);
-              //   }
-            } catch (err) {
-              console.log(err);
-            }
+            } catch (err) {}
           }}
         >
           <Form>
@@ -214,7 +205,7 @@ const ViewUsers = () => {
                     toggleDetails(index);
                   }}
                 >
-                  {details.includes(index) ? "Hide" : "Show"}
+                  {details.includes(index) ? "Cancel" : "Update"}
                 </CButton>
               </td>
             );
@@ -226,13 +217,13 @@ const ViewUsers = () => {
                   <Formik
                     initialValues={{
                       username: item.username,
-                      password: "",
+                      password: '',
                       role: item.role,
                     }}
                     onSubmit={async (values) => {
                       try {
                         const response = await fetch(
-                          "http://localhost:5000/api/admin/update/" + item._id,
+                          "http://localhost:5000/api/admin/users/update/" + item._id,
                           {
                             method: "POST",
                             headers: {
@@ -248,13 +239,7 @@ const ViewUsers = () => {
                           alert("User Updated Successfully!");
                         }
                         window.location.reload();
-                        //   if (responseData) {
-                        //     setDBValues(responseData);
-                        //     //   console.log(responseData.users);
-                        //   }
-                      } catch (err) {
-                        console.log(err);
-                      }
+                      } catch (err) {}
                     }}
                   >
                     <Form>
@@ -264,8 +249,11 @@ const ViewUsers = () => {
                           <Field name="username" as={CInput}></Field>
                         </CCol>
                         <CCol xs="12" xl="6">
-                          <CLabel htmlFor="password">Password</CLabel>
-                          <Field name="password" as={CInput}></Field>
+                            <CLabel htmlFor="password">Password <CTooltip content="Only enter text, if you want to update password. Else, please leave blank.">
+                            <CIcon name={'cilSettings'} />
+                            </CTooltip>
+                            </CLabel>
+                            <Field name="password" as={CInput}></Field>
                         </CCol>
                       </CFormGroup>
                       <CFormGroup row>
@@ -298,7 +286,7 @@ const ViewUsers = () => {
                     onClick={async () => {
                       try {
                         const response = await fetch(
-                          "http://localhost:5000/api/admin/delete/" + item._id,
+                          "http://localhost:5000/api/admin/users/delete/" + item._id,
                           {
                             method: "DELETE",
                             headers: {
@@ -313,13 +301,7 @@ const ViewUsers = () => {
                           alert("Delete successful!");
                         }
                         window.location.reload();
-                        //   if (responseData) {
-                        //     setDBValues(responseData);
-                        //     //   console.log(responseData.users);
-                        //   }
-                      } catch (err) {
-                        console.log(err);
-                      }
+                      } catch (err) {}
                     }}
                   >
                     Delete

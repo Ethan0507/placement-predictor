@@ -10,12 +10,18 @@ router.use((req, res, next) => {
     checkAuth(req, res, next);
 });
 
-router.get('/', adminController.getUsers);
+router.get('/users', adminController.getUsers);
 
-router.post('/newUser', adminController.addUsers);
+router.post('/users/new', adminController.addUsers);
 
-router.post('/update/:uid', adminController.updateUser);
+router.post('/users/update/:uid', adminController.updateUser);
 
-router.delete('/delete/:uid', adminController.deleteUser);
+router.delete('/users/delete/:uid', adminController.deleteUser);
+
+router.get('/studentdetails', adminController.getStudentDetails);
+
+router.post('/studentdetails/update/:did', adminController.updateStudentDetails);
+
+router.delete('/studentdetails/delete/:did', adminController.deleteStudentDetails);
 
 module.exports = router;

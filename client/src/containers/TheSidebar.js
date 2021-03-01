@@ -16,63 +16,6 @@ import CIcon from "@coreui/icons-react";
 
 import { AuthContext } from "../context/auth-context";
 
-const savedData = JSON.parse(localStorage.getItem("userData"));
-let role = null;
-if (savedData) {
-  role = savedData.role;
-}
-
-let navigation;
-
-switch (role) {
-  case "tpo":
-    navigation = [
-      {
-        _tag: "CSidebarNavTitle",
-        _children: ["TPO Panel"],
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "View Dashboard",
-        to: "/tpo/view-dashboard",
-        icon: "cil-control",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "View Students",
-        to: "/tpo/view-students",
-        icon: "cil-drop",
-      },
-    ];
-    break;
-
-  case "admin": {
-    navigation = [
-      {
-        _tag: "CSidebarNavTitle",
-        _children: ["Admin Panel"],
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "View Users",
-        to: "/admin/view-users",
-        icon: "cil-drop",
-      },
-      {
-        _tag: "CSidebarNavItem",
-        name: "View Student Details",
-        to: "/admin/view-student-details",
-        icon: "cil-drop",
-      },
-    ];
-    break;
-  }
-
-  default:
-    navigation = [];
-    break;
-}
-
 const TheSidebar = () => {
   const dispatch = useDispatch();
 
@@ -81,6 +24,57 @@ const TheSidebar = () => {
 
   if (auth.isLoggedIn && auth.userRole === "student") {
     show = false;
+  }
+
+  let navigation;
+
+  switch (auth.userRole) {
+    case "tpo":
+      navigation = [
+        {
+          _tag: "CSidebarNavTitle",
+          _children: ["TPO Panel"],
+        },
+        {
+          _tag: "CSidebarNavItem",
+          name: "View Dashboard",
+          to: "/tpo/view-dashboard",
+          icon: "cil-control",
+        },
+        {
+          _tag: "CSidebarNavItem",
+          name: "View Students",
+          to: "/tpo/view-students",
+          icon: "cil-drop",
+        },
+      ];
+      break;
+
+    case "admin": {
+      navigation = [
+        {
+          _tag: "CSidebarNavTitle",
+          _children: ["Admin Panel"],
+        },
+        {
+          _tag: "CSidebarNavItem",
+          name: "View Users",
+          to: "/admin/view-users",
+          icon: "cil-drop",
+        },
+        {
+          _tag: "CSidebarNavItem",
+          name: "View Student Details",
+          to: "/admin/view-student-details",
+          icon: "cil-drop",
+        },
+      ];
+      break;
+    }
+
+    default:
+      navigation = [];
+      break;
   }
 
   return (

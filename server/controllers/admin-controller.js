@@ -10,7 +10,7 @@ const getUsers = async (req, res, next) => {
 	let users;
 
 	try {
-		users = await User.find({});
+		users = await User.find({ _id: { $nin: [res.locals.userData.userId] } } );
 	} catch (err) {
 		const error = new HttpError(
 			"Something went wrong, could not find any users.",
@@ -103,17 +103,18 @@ const updateUser = async (req, res, next) => {
 		return next(error);
 	}
 
-	let newhashedPassword;
-	try {
-		newhashedPassword = await bcrypt.hash(password, 12);
-	} catch (err) {
-		return next(
-			new HttpError("Could not update user, please try again later!", 500)
-		);
+	if (!!password) {
+		let newhashedPassword;
+		try {
+			newhashedPassword = await bcrypt.hash(password, 12);
+		} catch (err) {
+			return next(
+				new HttpError("Could not update user, please try again later!", 500)
+			);
+		}
 	}
 
 	existingUser.username = username;
-	existingUser.password = newhashedPassword;
 	existingUser.role = role;
 
 	try {
@@ -172,7 +173,142 @@ const deleteUser = async (req, res, next) => {
 	res.status(200).json({ message: "Deleted User." });
 };
 
+
+const getStudentDetails = async (req, res, next) => {
+	let studentdetails;
+
+	try {
+		studentdetails = await StudentDetail.find({});
+	} catch (err) {
+		const error = new HttpError(
+			"Something went wrong, could not find any student's details.",
+			500
+		);
+		return next(error);
+	}
+
+	if (!studentdetails) {
+		const error = new HttpError(
+			"Could not find any details of students.",
+			404
+		);
+		return next(error);
+	}
+
+	res.json({ studentdetails: studentdetails });
+};
+
+
+const updateStudentDetails = async (req, res, next) => {
+	const { name,
+		gender,
+		xPercentage,
+		xiiPercentage,
+		degreePercentage,
+		etestP,
+		mbaP,
+		xiiBoard,
+		xBoard,
+		specialisation,
+		workex,
+		hscStream,
+		degreeT,
+		yearOfGrad,
+		placement_status
+	} = req.body;
+
+	const details = req.params.did;
+
+	let student;
+
+	try {
+		student = await StudentDetail.findById(details);
+	} catch (err) {
+		const error = new HttpError(
+			'Something went wrong, could not find details for student.',
+			500
+		);
+		return next(error);
+	}
+	
+	if (!student) {
+	const error = new HttpError(
+		'Could not find details for the provided student-id.',
+		404
+	);
+	return next(error);
+	}
+
+
+	student.name = name;
+	student.gender = gender;
+	student.xPercentage = xPercentage;
+	student.xiiPercentage = xiiPercentage;
+	student.degreePercentage = degreePercentage;
+	student.etestP = etestP;
+	student.mbaP = mbaP;
+	student.xiiBoard = xiiBoard;
+	student.xBoard = xBoard;
+	student.specialisation = specialisation;
+	student.workex = workex;
+	student.hscStream = hscStream;
+	student.degreeT = degreeT;
+	student.yearOfGrad = yearOfGrad;
+	student.placement_status = placement_status;
+	
+	try {
+		await student.save(); 
+	} catch (err) {
+		const error = new HttpError(
+		'Updating details failed, please try again later!',
+		500
+		);
+		return next(err);
+	}
+	
+	res.status(201).json({ details: student });
+};
+
+const deleteStudentDetails = async (req, res, next) => {
+	const did = req.params.did;
+
+	let details;
+
+	try {
+		details = await StudentDetail.findById(did);
+	} catch (err) {
+		const error = new HttpError(
+			"Something went wrong, could not delete student details.",
+			500
+		);
+		return next(error);
+	}
+
+	if (!details) {
+		const error = new HttpError("Could not find details for this student.", 404);
+		return next(error);
+	}
+
+	try {
+		const sess = await mongoose.startSession();
+		sess.startTransaction();
+		await details.remove({ session: sess });
+		await sess.commitTransaction();
+	} catch (err) {
+		const error = new HttpError(
+			"Something went wrong, could not delete details for this student.",
+			500
+		);
+		return next(error);
+	}
+
+	res.status(200).json({ message: "Deleted student details." });
+};
+
 exports.getUsers = getUsers;
 exports.addUsers = addUsers;
 exports.updateUser = updateUser;
 exports.deleteUser = deleteUser;
+exports.getStudentDetails = getStudentDetails;
+exports.updateStudentDetails = updateStudentDetails;
+exports.deleteStudentDetails = deleteStudentDetails;

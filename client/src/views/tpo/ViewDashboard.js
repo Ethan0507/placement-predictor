@@ -34,7 +34,6 @@ const ViewDashboard = () => {
         if (response.ok) {
           responseData = await response.json();
           setDBValues(responseData);
-          console.log(responseData);
         }
       } catch (err) {}
     })();

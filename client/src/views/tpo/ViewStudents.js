@@ -35,7 +35,6 @@ const ViewStudents = () => {
 
         if (responseData) {
           setDBValues(responseData);
-          console.log(responseData.students);
         }
       } catch (err) {}
     })();

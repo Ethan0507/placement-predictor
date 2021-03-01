@@ -38,6 +38,8 @@ const Login = () => {
         history.push("/student/view-status");
       } else if (authContext.userRole === "tpo") {
         history.push("/tpo/view-dashboard");
+      } else {
+        history.push("/admin/view-users");
       }
     }
   }, []);
@@ -50,7 +52,7 @@ const Login = () => {
     validationSchema,
     async onSubmit(values, actions) {
       try {
-        const responseData = await fetch("http://localhost:5000/api/login", {
+        const response = await fetch("http://localhost:5000/api/login", {
           method: "POST",
           body: JSON.stringify({
             username: values.username,
@@ -61,21 +63,24 @@ const Login = () => {
           },
         });
 
-        if (responseData.ok) {
-          const response = await responseData.json();
+        if (response.ok) {
+          const responseData = await response.json();
           authContext.login(
-            response.userId,
-            response.token,
-            response.role,
+            responseData.userId,
+            responseData.token,
+            responseData.role,
             null
           );
-          if (response.role === "student") {
+          if (responseData.role === "student") {
             history.push("/student/view-status");
-          } else if (response.role === "tpo") {
+          } else if (responseData.role === "tpo") {
             history.push("/tpo/view-dashboard");
           } else {
-            history.push("/admin/");
+            history.push("/admin/view-users");
           }
+        } else {
+          actions.setSubmitting(false);
+          actions.setErrors({ username: "Invalid username or password.", password: "Invalid username or password." });
         }
       } catch (err) {
         actions.setSubmitting(false);

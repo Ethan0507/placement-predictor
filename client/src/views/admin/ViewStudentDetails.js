@@ -11,12 +11,11 @@ import { AuthContext } from "src/context/auth-context";
 const ViewStudentDetails = () => {
   const auth = useContext(AuthContext);
   const [db_values, setDBValues] = useState([]);
-  //   console.log(auth.token);
 
   useEffect(() => {
     (async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/admin/", {
+        const response = await fetch("http://localhost:5000/api/admin/studentdetails", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -31,7 +30,6 @@ const ViewStudentDetails = () => {
 
         if (responseData) {
           setDBValues(responseData);
-          console.log(responseData.students);
         }
       } catch (err) {}
     })();
@@ -52,9 +50,9 @@ const ViewStudentDetails = () => {
   };
 
   const fields = [
-    { key: "username", _style: { width: "40%" } },
-    { key: "password", _style: { width: "20%" } },
-    { key: "role", _style: { width: "20%" } },
+    { key: "name", _style: { width: "40%" } },
+    { key: "xBoard", _style: { width: "20%" } },
+    { key: "placement_status", _style: { width: "20%" } },
     {
       key: "show_details",
       label: "",
@@ -77,7 +75,7 @@ const ViewStudentDetails = () => {
 
   return (
     <CDataTable
-      items={db_values.students}
+      items={db_values.studentdetails}
       fields={fields}
       columnFilter
       tableFilter
@@ -90,7 +88,7 @@ const ViewStudentDetails = () => {
       scopedSlots={{
         status: (item) => (
           <td>
-            <CBadge color={getBadge(item.status)}>{item.status}</CBadge>
+            <CBadge color={getBadge(item.placement_status)}>{item.placement_status}</CBadge>
           </td>
         ),
         show_details: (item, index) => {
@@ -105,7 +103,7 @@ const ViewStudentDetails = () => {
                   toggleDetails(index);
                 }}
               >
-                {details.includes(index) ? "Hide" : "Show"}
+                {details.includes(index) ? "Cancel" : "Update"}
               </CButton>
             </td>
           );
