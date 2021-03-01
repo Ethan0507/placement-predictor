@@ -13,7 +13,7 @@ import {
 } from "@coreui/react";
 
 import CIcon from "@coreui/icons-react";
-import { freeSet } from '@coreui/icons'
+import { freeSet } from "@coreui/icons";
 
 import { AuthContext } from "../context/auth-context";
 
@@ -40,7 +40,7 @@ const TheSidebar = () => {
           _tag: "CSidebarNavItem",
           name: "View Dashboard",
           to: "/tpo/view-dashboard",
-          icon: "cil-chart-pie",
+          icon: "cil-chart-line",
         },
         {
           _tag: "CSidebarNavItem",
@@ -89,7 +89,7 @@ const TheSidebar = () => {
           name="logo-negative"
           height={35}
         /> */}
-        <h4 className="c-sidebar-brand-full">Placement-Predictor</h4>
+        <h4 className="c-sidebar-brand-full">Placement Predictor</h4>
         <CIcon
           className="c-sidebar-brand-minimized"
           name="sygnet"

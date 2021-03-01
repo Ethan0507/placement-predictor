@@ -14,7 +14,7 @@ import {
   CLabel,
   CInput,
   CInvalidFeedback,
-  CSpinner
+  CSpinner,
 } from "@coreui/react";
 import CIcon from "@coreui/icons-react";
 import "./ViewStatus.css";
@@ -48,7 +48,6 @@ const SignupSchema = Yup.object().shape({
 });
 
 const ViewStatus = () => {
-
   const auth = useContext(AuthContext);
 
   const [isLoading, setLoading] = useState(false);
@@ -68,7 +67,7 @@ const ViewStatus = () => {
     hscStream: "",
     degreeT: "",
     yearOfGrad: "",
-    placement_status: ""
+    placement_status: "",
   });
 
   const [errorOccured, setErrorOccured] = useState(false);
@@ -81,8 +80,8 @@ const ViewStatus = () => {
         const response = await fetch("http://localhost:5000/api/student/", {
           method: "GET",
           headers: {
-            "Authorization" : 'Bearer ' +auth.token
-          }
+            Authorization: "Bearer " + auth.token,
+          },
         });
 
         let responseData;
@@ -90,11 +89,10 @@ const ViewStatus = () => {
         if (response.ok) {
           setLoading(false);
           responseData = await response.json();
-          if(!!responseData.student) {
+          if (!!responseData.student) {
             setStudentDetails(responseData.student);
           }
         }
-
       } catch (err) {
         setLoading(false);
         setErrorOccured(true);
@@ -128,12 +126,12 @@ const ViewStatus = () => {
                 workex: values.workex,
                 hscStream: values.hscStream,
                 degreeT: values.degreeT,
-                yearOfGrad: values.yearOfGrad
+                yearOfGrad: values.yearOfGrad,
               }),
               headers: {
-                "Content-Type" : 'application/json',
-                "Authorization" : "Bearer " +auth.token
-              }
+                "Content-Type": "application/json",
+                Authorization: "Bearer " + auth.token,
+              },
             });
 
             const responseData = await response.json();
@@ -151,17 +149,29 @@ const ViewStatus = () => {
         {({ errors, values, touched }) => (
           <div>
             <CCard className="card-container">
-              <CCardHeader>
+              <CCardHeader style={{ fontWeight: "bold" }}>
                 Check Placement Status
                 {/* <small> validation feedback</small> */}
               </CCardHeader>
-              {errorOccured && <CAlert color="warning" closeButton>
-                Some error occurred, please try again!
-              </CAlert>}
+              {errorOccured && (
+                <CAlert color="warning" closeButton>
+                  Some error occurred, please try again!
+                </CAlert>
+              )}
               <Form>
                 <CCardBody>
-                {!!studentDetails.name && studentDetails.placement_status === "placed" && <CAlert name="status" color="success">Placed</CAlert>}
-                {!!studentDetails.name && studentDetails.placement_status === "unplaced" && <CAlert name="status" color="warning">Unplaced</CAlert>}
+                  {!!studentDetails.name &&
+                    studentDetails.placement_status === "placed" && (
+                      <CAlert name="status" color="success">
+                        Placed
+                      </CAlert>
+                    )}
+                  {!!studentDetails.name &&
+                    studentDetails.placement_status === "unplaced" && (
+                      <CAlert name="status" color="warning">
+                        Unplaced
+                      </CAlert>
+                    )}
                   <CFormGroup row>
                     <CCol xs="12" xl="4">
                       <CLabel htmlFor="name">Name</CLabel>
@@ -352,7 +362,9 @@ const ViewStatus = () => {
                         disabled={!!studentDetails.degreeT}
                       >
                         <option value="">Select an option</option>
-                        <option value="Science & Technology">Science & Technology</option>
+                        <option value="Science & Technology">
+                          Science & Technology
+                        </option>
                         <option value="Commerce & Mgmt">Commerce & Mgmt</option>
                         <option value="Others">Others</option>
                       </Field>
@@ -441,20 +453,33 @@ const ViewStatus = () => {
                     </CCol>
                   </CFormGroup>
                 </CCardBody>
-                {!studentDetails.name && <CCardFooter>
-                  {!isLoading && <CButton type="submit" size="sm" color="success">
-                    <CIcon name="cil-scrubber" /> Submit
-                  </CButton>}
-                  {!isLoading && <CButton type="reset" size="sm" color="danger" className="ml-1">
-                    <CIcon name="cil-ban" /> Reset
-                  </CButton>}
-                  {isLoading && <CSpinner color="info" />}
-                </CCardFooter>}
+                {!studentDetails.name && (
+                  <CCardFooter>
+                    {!isLoading && (
+                      <CButton type="submit" size="sm" color="success">
+                        <CIcon name="cil-scrubber" /> Submit
+                      </CButton>
+                    )}
+                    {!isLoading && (
+                      <CButton
+                        type="reset"
+                        size="sm"
+                        color="danger"
+                        className="ml-1"
+                      >
+                        <CIcon name="cil-ban" /> Reset
+                      </CButton>
+                    )}
+                    {isLoading && <CSpinner color="info" />}
+                  </CCardFooter>
+                )}
               </Form>
             </CCard>
           </div>
         )}
       </Formik>
+      <br />
+      <br />
     </div>
   );
 };

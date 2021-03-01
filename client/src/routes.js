@@ -4,7 +4,6 @@ const Users = React.lazy(() => import("./views/users/Users"));
 const User = React.lazy(() => import("./views/users/User"));
 
 const ViewStatus = React.lazy(() => import("./views/student/ViewStatus"));
-const ViewHistory = React.lazy(() => import("./views/student/ViewHistory"));
 
 const ViewDashboard = React.lazy(() => import("./views/tpo/ViewDashboard"));
 const ViewStudents = React.lazy(() => import("./views/tpo/ViewStudents"));

@@ -19,11 +19,17 @@ const TheHeaderDropdown = () => {
   return (
     <CDropdown inNav className="c-header-nav-items mx-2" direction="down">
       <CDropdownToggle className="c-header-nav-link" caret={false}>
-        <div className="c-avatar">
-          <h5>
-            <CIcon
-              name="cil-user"
-            />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+          }}
+          className="c-avatar"
+        >
+          <div>
+            <CIcon name="cil-user" />
+          </div>
+          <h5 className="ml-1" style={{ margin: "0", padding: "0" }}>
             {authContext.userRole}
           </h5>
         </div>

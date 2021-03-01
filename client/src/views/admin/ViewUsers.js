@@ -26,15 +26,10 @@ import * as Yup from "yup";
 
 const ViewUsers = () => {
   //Add modal
-
   const [modal, setModal] = useState(false);
   const toggle = () => {
     setModal(!modal);
   };
-
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
 
   const auth = useContext(AuthContext);
   const [db_values, setDBValues] = useState([]);
@@ -102,8 +97,13 @@ const ViewUsers = () => {
 
   return (
     <>
-      <CButton shape="pill" color="info" onClick={toggle}>
-        Add
+      <CButton
+        className="float-right ml-4"
+        shape="pill"
+        color="info"
+        onClick={toggle}
+      >
+        Add User
       </CButton>
       <CModal show={modal} onClose={toggle}>
         <Formik
@@ -205,7 +205,7 @@ const ViewUsers = () => {
                     toggleDetails(index);
                   }}
                 >
-                  {details.includes(index) ? "Cancel" : "Update"}
+                  {details.includes(index) ? "Cancel" : "Show"}
                 </CButton>
               </td>
             );
@@ -253,7 +253,7 @@ const ViewUsers = () => {
                           <CLabel htmlFor="password">
                             Password{" "}
                             <CTooltip content="Only enter text, if you want to update password. Else, please leave blank.">
-                              <CIcon name={"cilSettings"} />
+                              <CIcon name={"cilLightbulb"} />
                             </CTooltip>
                           </CLabel>
                           <Field name="password" as={CInput}></Field>
@@ -285,25 +285,31 @@ const ViewUsers = () => {
                         color="danger"
                         className="ml-1"
                         onClick={async () => {
-                          try {
-                            const response = await fetch(
-                              "http://localhost:5000/api/admin/users/delete/" +
-                                item._id,
-                              {
-                                method: "DELETE",
-                                headers: {
-                                  "Content-Type": "application/json",
-                                  Authorization: "Bearer " + auth.token,
-                                },
-                              }
-                            );
+                          if (
+                            window.confirm(
+                              "Are you sure you want to delete this user?"
+                            )
+                          ) {
+                            try {
+                              const response = await fetch(
+                                "http://localhost:5000/api/admin/users/delete/" +
+                                  item._id,
+                                {
+                                  method: "DELETE",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization: "Bearer " + auth.token,
+                                  },
+                                }
+                              );
 
-                            let responseData;
-                            if (response.ok) {
-                              alert("Delete successful!");
-                            }
-                            window.location.reload();
-                          } catch (err) {}
+                              let responseData;
+                              if (response.ok) {
+                                alert("Delete successful!");
+                              }
+                              window.location.reload();
+                            } catch (err) {}
+                          }
                         }}
                       >
                         Delete

@@ -1,5 +1,5 @@
-import React, { useContext } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useContext } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   CHeader,
   CToggler,
@@ -9,54 +9,59 @@ import {
   CHeaderNavLink,
   CSubheader,
   CBreadcrumbRouter,
-  CLink
-} from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+  CLink,
+} from "@coreui/react";
+import CIcon from "@coreui/icons-react";
 
 import { AuthContext } from "../context/auth-context";
 
-import { 
-  TheHeaderDropdown,
-}  from './index'
+import { TheHeaderDropdown } from "./index";
 
 const TheHeader = () => {
-  
   const authContext = useContext(AuthContext);
 
-  const dispatch = useDispatch()
-  const sidebarShow = useSelector(state => state.sidebarShow)
+  const dispatch = useDispatch();
+  const sidebarShow = useSelector((state) => state.sidebarShow);
 
   const toggleSidebar = () => {
-    const val = [true, 'responsive'].includes(sidebarShow) ? false : 'responsive'
-    dispatch({type: 'set', sidebarShow: val})
-  }
+    const val = [true, "responsive"].includes(sidebarShow)
+      ? false
+      : "responsive";
+    dispatch({ type: "set", sidebarShow: val });
+  };
 
   const toggleSidebarMobile = () => {
-    const val = [false, 'responsive'].includes(sidebarShow) ? true : 'responsive'
-    dispatch({type: 'set', sidebarShow: val})
-  }
+    const val = [false, "responsive"].includes(sidebarShow)
+      ? true
+      : "responsive";
+    dispatch({ type: "set", sidebarShow: val });
+  };
 
   return (
     <CHeader>
-      {authContext.isLoggedIn && authContext.userRole !== "student" && <CToggler
-        inHeader
-        className="ml-md-3 d-lg-none"
-        onClick={toggleSidebarMobile}
-      />}
-      {authContext.isLoggedIn && authContext.userRole !== "student" && <CToggler
-        inHeader
-        className="ml-3 d-md-down-none"
-        onClick={toggleSidebar}
-      />}
+      {authContext.isLoggedIn && authContext.userRole !== "student" && (
+        <CToggler
+          inHeader
+          className="ml-md-3 d-lg-none"
+          onClick={toggleSidebarMobile}
+        />
+      )}
+      {authContext.isLoggedIn && authContext.userRole !== "student" && (
+        <CToggler
+          inHeader
+          className="ml-3 d-md-down-none"
+          onClick={toggleSidebar}
+        />
+      )}
       <CHeaderBrand className="mx-auto d-lg-none" to="/">
         <h4>Placement Predictor</h4>
       </CHeaderBrand>
 
       <CHeaderNav className="d-md-down-none mr-auto">
-        <CHeaderNavItem className="px-3" >
+        <CHeaderNavItem className="px-3">
           <CHeaderNavLink></CHeaderNavLink>
         </CHeaderNavItem>
-        <CHeaderNavItem  className="px-3">
+        <CHeaderNavItem className="px-3">
           <CHeaderNavLink></CHeaderNavLink>
         </CHeaderNavItem>
         <CHeaderNavItem className="px-3">
@@ -65,10 +70,10 @@ const TheHeader = () => {
       </CHeaderNav>
 
       <CHeaderNav className="px-3">
-        <TheHeaderDropdown/>
+        <TheHeaderDropdown />
       </CHeaderNav>
     </CHeader>
-  )
-}
+  );
+};
 
-export default TheHeader
+export default TheHeader;

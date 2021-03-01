@@ -125,7 +125,7 @@ const ViewStudentDetails = () => {
                   toggleDetails(index);
                 }}
               >
-                {details.includes(index) ? "Cancel" : "Update"}
+                {details.includes(index) ? "Cancel" : "Show"}
               </CButton>
             </td>
           );
@@ -170,7 +170,7 @@ const ViewStudentDetails = () => {
 
                       let responseData;
                       if (response.ok) {
-                        this.notify();
+                        alert("Updated successfully!");
                       }
                       // window.location.reload();
                     } catch (err) {}
@@ -308,25 +308,31 @@ const ViewStudentDetails = () => {
                       color="danger"
                       className="ml-1"
                       onClick={async () => {
-                        try {
-                          const response = await fetch(
-                            "http://localhost:5000/api/admin/studentdetails/delete/" +
-                              item._id,
-                            {
-                              method: "DELETE",
-                              headers: {
-                                "Content-Type": "application/json",
-                                Authorization: "Bearer " + auth.token,
-                              },
-                            }
-                          );
+                        if (
+                          window.confirm(
+                            "Are you sure you want to delete the student details?"
+                          )
+                        ) {
+                          try {
+                            const response = await fetch(
+                              "http://localhost:5000/api/admin/studentdetails/delete/" +
+                                item._id,
+                              {
+                                method: "DELETE",
+                                headers: {
+                                  "Content-Type": "application/json",
+                                  Authorization: "Bearer " + auth.token,
+                                },
+                              }
+                            );
 
-                          let responseData;
-                          if (response.ok) {
-                            alert("Delete successful!");
-                          }
-                          window.location.reload();
-                        } catch (err) {}
+                            let responseData;
+                            if (response.ok) {
+                              alert("Delete successful!");
+                            }
+                            window.location.reload();
+                          } catch (err) {}
+                        }
                       }}
                     >
                       Delete
