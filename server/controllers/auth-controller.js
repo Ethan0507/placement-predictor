@@ -57,7 +57,7 @@ const login = async (req, res, next) => {
         role: existingUser.role
       },
       'supersecret_dont_share',
-      {expiresIn : '1h'});
+      {expiresIn : '4h'});
     }catch(err) {
       return next(new HttpError("Login failed, please try again later!",500));
     }

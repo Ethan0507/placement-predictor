@@ -46,7 +46,8 @@ const updateDetails = async (req, res, next) => {
       workex,
       hscStream,
       degreeT,
-      yearOfGrad } = req.body;
+      yearOfGrad,
+      placement_status } = req.body;
     
     let userDetails;
 
@@ -81,7 +82,7 @@ const updateDetails = async (req, res, next) => {
         hscStream: hscStream,
         degreeT: degreeT,
         yearOfGrad: yearOfGrad,
-        placement_status: "unplaced",
+        placement_status: placement_status,
         userId: userDetails
     });
     

@@ -51,7 +51,7 @@ const ViewUsers = () => {
         }
 
         if (responseData) {
-          setDBValues(responseData);
+          setDBValues(responseData.users);
         }
       } catch (err) {}
     })();
@@ -137,7 +137,6 @@ const ViewUsers = () => {
               <CFormGroup>
                 <Field
                   as={CInput}
-                  id="username"
                   type="string"
                   placeholder="Username"
                   name="username"
@@ -145,7 +144,6 @@ const ViewUsers = () => {
                 <br />
                 <Field
                   as={CInput}
-                  id="password"
                   type="password"
                   placeholder="Password"
                   name="password"
@@ -153,7 +151,6 @@ const ViewUsers = () => {
                 <br />
                 <Field
                   as={CSelect}
-                  id="role"
                   type="string"
                   placeholder="Role"
                   name="role"
@@ -177,7 +174,7 @@ const ViewUsers = () => {
         </Formik>
       </CModal>
       <CDataTable
-        items={db_values.users}
+        items={db_values}
         fields={fields}
         columnFilter
         tableFilter
@@ -215,6 +212,7 @@ const ViewUsers = () => {
               <CCollapse show={details.includes(index)}>
                 <CCardBody>
                   <Formik
+                    enableReinitialize={true}
                     initialValues={{
                       username: item.username,
                       password: "",
@@ -247,7 +245,7 @@ const ViewUsers = () => {
                       <CFormGroup row>
                         <CCol xs="12" xl="6">
                           <CLabel htmlFor="username">Username</CLabel>
-                          <Field name="username" as={CInput}></Field>
+                          <Field name="username" as={CInput} key={item._id +'_username'}></Field>
                         </CCol>
                         <CCol xs="12" xl="6">
                           <CLabel htmlFor="password">
@@ -256,7 +254,7 @@ const ViewUsers = () => {
                               <CIcon name={"cilLightbulb"} />
                             </CTooltip>
                           </CLabel>
-                          <Field name="password" as={CInput}></Field>
+                          <Field name="password" as={CInput}  key={item._id +'_password'}></Field>
                         </CCol>
                       </CFormGroup>
                       <CFormGroup row>
@@ -264,10 +262,10 @@ const ViewUsers = () => {
                           <CLabel htmlFor="role">Role</CLabel>
                           <Field
                             as={CSelect}
-                            id="role"
                             type="string"
                             placeholder="Role"
                             name="role"
+                            key={item._id+'_role'}
                           >
                             <option value="">Select a role</option>
                             <option value="student">Student</option>
@@ -303,7 +301,6 @@ const ViewUsers = () => {
                                 }
                               );
 
-                              let responseData;
                               if (response.ok) {
                                 alert("Delete successful!");
                               }

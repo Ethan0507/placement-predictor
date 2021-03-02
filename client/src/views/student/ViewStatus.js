@@ -20,6 +20,9 @@ import CIcon from "@coreui/icons-react";
 import "./ViewStatus.css";
 import { AuthContext } from "src/context/auth-context";
 
+
+const axios = require('axios');
+
 const SignupSchema = Yup.object().shape({
   name: Yup.string().required("Required"),
   gender: Yup.string().required("Required"),
@@ -110,35 +113,54 @@ const ViewStatus = () => {
           // same shape as initial values
           setLoading(true);
           try {
-            const response = await fetch("http://localhost:5000/api/student/", {
-              method: "POST",
-              body: JSON.stringify({
-                name: values.name,
-                gender: values.gender,
-                xPercentage: values.xPercentage,
-                xiiPercentage: values.xiiPercentage,
-                degreePercentage: values.degreePercentage,
-                etestP: values.etestP,
-                mbaP: values.mbaP,
-                xiiBoard: values.xiiBoard,
-                xBoard: values.xBoard,
-                specialisation: values.specialisation,
-                workex: values.workex,
-                hscStream: values.hscStream,
-                degreeT: values.degreeT,
-                yearOfGrad: values.yearOfGrad,
-              }),
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: "Bearer " + auth.token,
+            var data = JSON.stringify({"gender":"male","xPercentage":90,"xiiPercentage":80,"degreePercentage":80,"workex":"yes","etestP":90,"specialisation":"yes","mbaP":85});
+
+            var config = {
+              method: 'post',
+              url: 'http://localhost:7000/predict',
+              headers: { 
+                'Content-Type': 'application/json', 
+                'Authorization': 'Basic Og=='
               },
+              data : data
+            };
+
+            axios(config)
+            .then(async function (res) {
+              const placement_data = res.data;
+              const response = await fetch("http://localhost:5000/api/student/", {
+                method: "POST",
+                body: JSON.stringify({
+                  name: values.name,
+                  gender: values.gender,
+                  xPercentage: values.xPercentage,
+                  xiiPercentage: values.xiiPercentage,
+                  degreePercentage: values.degreePercentage,
+                  etestP: values.etestP,
+                  mbaP: values.mbaP,
+                  xiiBoard: values.xiiBoard,
+                  xBoard: values.xBoard,
+                  specialisation: values.specialisation,
+                  workex: values.workex,
+                  hscStream: values.hscStream,
+                  degreeT: values.degreeT,
+                  yearOfGrad: values.yearOfGrad,
+                  placement_status: placement_data
+                }),
+                headers: {
+                  "Content-Type": "application/json",
+                  "Authorization": "Bearer " + auth.token,
+                },
+              });
+              
+              if (response.ok) {
+                window.location.reload();
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
             });
-
-            const responseData = await response.json();
-
-            if (response.ok) {
-              window.location.reload();
-            }
+            
           } catch (err) {
             actions.setSubmitting(false);
             setLoading(false);
@@ -148,16 +170,16 @@ const ViewStatus = () => {
       >
         {({ errors, values, touched }) => (
           <div>
+            {errorOccured && (
+                <CAlert color="warning" closeButton>
+                  Some error occurred, please try again!
+                </CAlert>
+              )}
             <CCard className="card-container">
               <CCardHeader style={{ fontWeight: "bold" }}>
                 Check Placement Status
                 {/* <small> validation feedback</small> */}
               </CCardHeader>
-              {errorOccured && (
-                <CAlert color="warning" closeButton>
-                  Some error occurred, please try again!
-                </CAlert>
-              )}
               <Form>
                 <CCardBody>
                   {!!studentDetails.name &&
