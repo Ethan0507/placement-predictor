@@ -113,7 +113,6 @@ const ViewStatus = () => {
           // same shape as initial values
           setLoading(true);
           try {
-            var data = JSON.stringify({"gender":"male","xPercentage":90,"xiiPercentage":80,"degreePercentage":80,"workex":"yes","etestP":90,"specialisation":"yes","mbaP":85});
 
             var config = {
               method: 'post',
@@ -122,7 +121,16 @@ const ViewStatus = () => {
                 'Content-Type': 'application/json', 
                 'Authorization': 'Basic Og=='
               },
-              data : data
+              data : JSON.stringify({
+                "gender": values.gender,
+                "xPercentage": values.xPercentage,
+                "xiiPercentage": values.xiiPercentage,
+                "degreePercentage": values.degreePercentage,
+                "workex": values.workex,
+                "etestP": values.etestP,
+                "specialisation": values.specialisation,
+                "mbaP": values.mbaP
+              })
             };
 
             axios(config)
