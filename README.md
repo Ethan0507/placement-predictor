@@ -19,6 +19,9 @@ An in-depth paragraph about your project and overview of use.
 * Any modifications needed to be made to files/folders
 
 ### Executing program
+(Python Server setup)
+
+Open up a terminal in VScode (make sure you're in the 'ml-python' directory)
 
 * Installing virtualenv
 ```
@@ -39,6 +42,46 @@ pip install -r .\requirements.txt
 * Running the Flask server
 ```
 python app.py
+```
+
+
+
+(React server setup)
+
+Open another terminal in the same or different VS code window and navigate to 'client' directory
+
+* Move into the client repo
+```
+cd client
+```
+
+* Install necessary dependencies
+```
+npm install
+```
+
+* Running the React server
+```
+npm start
+```
+
+(NodeJS server setup)
+
+Open another terminal in the same or different VS code window and navigate to 'server' directory
+
+* Move into the 'server' repo
+```
+cd client
+```
+
+* Install necessary dependencies
+```
+npm install
+```
+
+* Running the NodeJS server
+```
+npm start
 ```
 
 ## Help
