@@ -56,11 +56,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y,train_size=0.8,random_s
 
 # Log regression model creation
 logreg = LogisticRegression(solver='liblinear', random_state=0).fit(X_train, y_train)
-
 # gender, ssc, hsc, degree, workex, e-test, specialisation, mba
 def predict(details):
 
-    if details[0] =="male":
+    if details[0] =="Male":
         details[0] = 1
     else:
         details[0] = 0
@@ -72,7 +71,7 @@ def predict(details):
     else:
         details[4] = 0
     # 5 ip_l.append(float(input("Enter e test score")))
-    if details[6] !="":
+    if details[6] != "":
         details[6] = 1
     else:
         details[6] = 0
@@ -83,6 +82,8 @@ def predict(details):
 
     y_pred=logreg.predict(ip)
     if (y_pred[0]==1):
+        print("Prediction for this request was: 'placed'")
         return "placed"
     else:
+        print("Prediction for this request was: 'unplaced'")
         return "unplaced"
